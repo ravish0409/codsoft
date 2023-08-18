@@ -72,7 +72,10 @@ class QuizApp:
     def check_answer(self, selected_answer):
         correct_answer = self.quiz_questions[self.current_question_index]['correct_answer']
 
-        if selected_answer == correct_answer:
+        cleaned_selected_answer = self.clean_text(selected_answer)
+        cleaned_correct_answer = self.clean_text(correct_answer)
+
+        if cleaned_selected_answer == cleaned_correct_answer:
             self.score += 1
             messagebox.showinfo("Result", "Correct!")
         else:
@@ -88,6 +91,7 @@ class QuizApp:
 
         for button in self.answer_buttons:
             button.config(state=tk.DISABLED)
+
 
     def next_question(self):
         self.ask_current_question(self.current_question_index + 1)
