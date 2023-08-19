@@ -3,7 +3,38 @@ import tkinter as tk
 from tkinter import messagebox
 import random
 import re
-from PIL import Image, ImageTk
+class WelcomeScreen:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Welcome to the Quiz!")
+        self.root.geometry("400x300")
+
+        self.welcome_frame = tk.Frame(self.root)
+        self.welcome_frame.pack()
+
+        self.welcome_label = tk.Label(self.welcome_frame, text="Welcome to the Quiz App", font=("Arial", 18, "bold"))
+        self.welcome_label.pack(pady=20)
+
+        self.rules_text = (
+            "  Rules:\n\n"
+            "1. You will be presented with a set of questions.\n"
+            "2. Choose the correct answer from the given options.\n"
+            "3. You have a limited number of attempts per question.\n"
+            "4. Your final score will be displayed at the end.\n"
+            "5. Have fun and good luck!"
+        )
+
+        self.rules_label = tk.Label(self.welcome_frame, text=self.rules_text,font=("Arial", 12),justify="left")
+        self.rules_label.pack(pady=10)
+
+
+        self.start_button = tk.Button(self.welcome_frame, text="Start Quiz", font=("Arial", 14), command=self.start_quiz)
+        self.start_button.pack()
+
+    def start_quiz(self):
+        self.welcome_frame.destroy()  # Close the welcome window
+        app = QuizApp(root)  # Start the quiz
+
 class QuizApp:
     def __init__(self, root):
         self.root = root
@@ -22,7 +53,7 @@ class QuizApp:
         self.answer_buttons = []
 
         self.next_button = tk.Button(root, text="Next Question", font=("Arial", 12), state=tk.DISABLED, command=self.next_question)
-        self.next_button.pack(pady=10)
+        self.next_button.pack(side="bottom",pady=10)
 
         self.wrong_answers = 0
         self.max_wrong_attempts = 4
@@ -97,29 +128,40 @@ class QuizApp:
         self.ask_current_question(self.current_question_index + 1)
         self.next_button.config(state=tk.DISABLED)
 
+    # Modify the finish_quiz method
     def finish_quiz(self):
+        play_again=0
         if self.score == self.num_questions:
             congrats_message = "Congratulations! 🎉🎉 You scored a perfect score in the quiz!"
-            messagebox.showinfo("Quiz Finished", congrats_message)
+            play_again = messagebox.askyesno("Quiz Finished", congrats_message+"\n\nDo you want to play again?")
         else:
-            messagebox.showinfo("Quiz Finished", f"You scored {self.score} out of {self.num_questions}.")
+            play_again = messagebox.askyesno("Quiz Finished", f"You scored {self.score} out of {self.num_questions}.\n\nDo you want to play again?")
+        if play_again:
+            self.reset_quiz()
+        
         self.root.quit()
+    
 
+    # Add a new method to reset the quiz
+    def reset_quiz(self):
+        self.current_question_index = 0
+        self.score = 0
+        self.wrong_answers = 0
+
+        self.root.destroy()
+        root = tk.Tk()
+        root.title("Quiz App")
+        root.minsize(width=500, height=320)
+        QuizApp(root)
+        root.mainloop()
 
 
 if __name__ == "__main__":
     root = tk.Tk()
     root.title("Quiz App")
     root.minsize(width=500, height=320)  # Set maximum window size
+    welcome = WelcomeScreen(root)
 
-    # Load the background image using Pillow
-    background_image = Image.open("background.jpg")
-    background_photo = ImageTk.PhotoImage(background_image)
-
-    # Create a label to display the background image
-    background_label = tk.Label(root, image=background_photo)
-    background_label.place(relwidth=1, relheight=1)  # Cover the entire window
-
-    app = QuizApp(root)
+    
     root.mainloop()
 
