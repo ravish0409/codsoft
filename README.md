@@ -50,7 +50,7 @@ The To-Do List App is a graphical user interface (GUI) application created using
 <h6>A simple password generator application built using Python and Tkinter.</h6>
 
 ```bash
-python task_3/passwordgenerator
+python task_3/passwordgenerator.py
 ```
 
 <h4>Overview</h4>
