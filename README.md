@@ -3,7 +3,7 @@
 <h3>Getting Started:</h3>
 
 ```bash
-git clone [https://github.com/your-username/your-repo.git](https://github.com/ravish0409/codsoft.git)
+git clone https://github.com/ravish0409/codsoft.git
 cd codsoft
 pip install -r requirements.txt
 ```
